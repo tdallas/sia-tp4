@@ -47,15 +47,13 @@ class Kohonen():
 
     # shape == 'R' --> RECTANGULAR
     # shape == 'H' --> HEXAGONAL
-    # If shape == 'R', then neighborhood is ({})
-    # If shape == 'H', then neighborhood is ({})
     def update_weights_of_neighborhood(self, min_weight_index, input):
         if self.shape == 'R':
             self.update_weights_of_neighborhood_R(min_weight_index, input)
         # else:
         #     self.update_weights_of_neighborhood_H(min_weight_index)
 
-    # Duplicate code everywhere
+    # Im just updating its REALLY NEAR neighbors
     def update_weights_of_neighborhood_R(self, min_weight_index, input):
         # UP, DOWN, RIGHT, LEFT
         indexes = [min_weight_index - self.x_neurons_count,
