@@ -28,8 +28,8 @@ df = pd.DataFrame(matrix_for_correlation_with_keys, columns=[
 
 correlation_matrix = df.corr()
 # If you want to show heatmap:
-# sn.heatmap(correlation_matrix, annot=True)
-# plt.show()
+sn.heatmap(correlation_matrix, annot=True)
+plt.show()
 
 covariance_matrix = np.cov(matrix_for_correlation)
 
