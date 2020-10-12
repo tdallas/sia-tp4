@@ -22,7 +22,7 @@ fig = plt.figure(1, figsize=(9, 6))
 ax = fig.add_subplot(111)
 
 ## Custom x-axis labels
-ax.set_xticklabels(['Variables no estandarizadas'])
+ax.set_xticklabels(['Variables estandarizadas'])
 
 ## add patch_artist=True option to ax.boxplot() 
 ## to get fill color
@@ -51,4 +51,5 @@ for median in bp['medians']:
 for flier in bp['fliers']:
     flier.set(marker='o', color='#e7298a', alpha=0.5)
 
+plt.tight_layout()
 plt.show()
