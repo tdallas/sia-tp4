@@ -17,12 +17,13 @@ class Kohonen():
         self.standarized_dataset = standarized_dataset
         self.x_neurons_count = x_neurons_count
         self.y_neurons_count = y_neurons_count
-        self.iteration_limit = 50
+        self.iteration_limit = iteration_limit
         # self.iteration_limit = iteration_limit * \
         # self.x_neurons_count * self.y_neurons_count
         self.eta = eta
         self.weights = self.initialize_random_weights(
             len(standarized_dataset[0]))
+        self.count_weights = np.zeros(len(self.weights))
         # We wont using this for much stuff right now
         self.shape = 'R'
         self.radius_limit = 1 if self.shape == 'R' else sqrt(2)
@@ -62,10 +63,27 @@ class Kohonen():
                    min_weight_index + self.x_neurons_count,
                    min_weight_index + 1,
                    min_weight_index - 1]
-        filter(lambda x: x >= 0 and x < len(self.weights), indexes)
-        for index in indexes:
+        indexes_filtered = filter(lambda x: x >= 0 and x < len(self.weights), indexes)
+        for index in indexes_filtered:
             self.weights[index] = self.weights[index] + \
                 self.eta * (input-self.weights[index])
+
+    def calculate_avg_distance_to_neighborhood(self, current_index):
+        # UP, DOWN, RIGHT, LEFT
+        indexes = [current_index - self.x_neurons_count,
+                   current_index + self.x_neurons_count,
+                   current_index + 1,
+                   current_index - 1]
+        indexes_filtered = list(filter(lambda x: x >= 0 and x < len(self.weights), indexes))
+        if len(indexes_filtered) == 0:
+            return 0 
+        avg = 0
+        for index in indexes_filtered:
+            avg += self.euclidean_distance(self.weights[current_index], self.weights[index])
+        return avg / len(list(indexes_filtered))
+
+    def get_count_weights(self):
+        return self.count_weights
 
     def train(self):
         current_iteration = 0
@@ -82,9 +100,12 @@ class Kohonen():
                 weights_index += 1
 
             min_weight_index = self.get_node_with_min_distance(distances)
+            self.count_weights[min_weight_index]+=1
+            # print(min_weight_index, self.count_weights[min_weight_index])
+            # print('going to index', min_weight_index)
             self.update_weights_of_neighborhood(min_weight_index, random_input)
-            print(min_weight_index)
-            print(current_iteration, self.iteration_limit)
+            # print(min_weight_index)
+            # print(current_iteration, self.iteration_limit)
             current_iteration += 1
 
     def construct_nodes_map(self):
@@ -103,5 +124,13 @@ class Kohonen():
             x_index+=1    
         return np.array(som_map)
 
-    # def build_u_matrix(self):
+    def build_u_matrix(self):
+        u_matrix=[]
+        for index in range(len(self.weights)):
+            u_row = []
+            for _ in range(self.x_neurons_count):
+                u_row.append(self.calculate_avg_distance_to_neighborhood(index))
+            u_matrix.append(u_row)
+        return u_matrix
+
         
