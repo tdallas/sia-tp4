@@ -11,7 +11,7 @@ parser = DataParser('europe.csv')
 # print(np.matrix(parser.get_numerical_csv()).T)
 
 # matrix_for_correlation = np.array(parser.get_numerical_csv(), dtype=float).T
-matrix_for_correlation = parser.get_standarized_matrix()
+matrix_for_correlation = np.array(parser.get_standarized_matrix())
 
 # print('ESTANDARIZADA',parser.get_standarized_matrix())
 
@@ -33,8 +33,8 @@ correlation_matrix = df.corr()
 # If you want to show heatmap:
 sn.heatmap(correlation_matrix, annot=True)
 plt.xticks(rotation=45)
-plt.tight_layout()
-plt.show()
+# plt.tight_layout()
+# plt.show()
 
 covariance_matrix = np.cov(matrix_for_correlation)
 
@@ -49,10 +49,10 @@ autovals_cov, autovecs_cov = np.linalg.eig(covariance_matrix)
 
 
 # PCA
-n_components = 3
+n_components = 2
 pca = PCA(n_components=n_components)
-pca.fit(matrix_for_correlation)
-# print('prev', matrix_for_correlation)
-X_new = pca.transform(matrix_for_correlation)
+pca.fit(matrix_for_correlation.T)
+X_new = pca.transform(matrix_for_correlation.T)
 
 # print(X_new)
+print(pca.explained_variance_ratio_)
