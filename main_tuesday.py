@@ -10,7 +10,10 @@ parser = Parser('europe.csv')
 # print(parser.get_numerical_csv())
 # print(np.matrix(parser.get_numerical_csv()).T)
 
-matrix_for_correlation = np.array(parser.get_numerical_csv(), dtype=float).T
+# matrix_for_correlation = np.array(parser.get_numerical_csv(), dtype=float).T
+matrix_for_correlation = parser.get_standarized_matrix()
+
+# print('ESTANDARIZADA',parser.get_standarized_matrix())
 
 # 'Area','GDP','Inflation','Life.expect','Military','Pop.growth','Unemployment'
 matrix_for_correlation_with_keys = {
@@ -36,11 +39,18 @@ covariance_matrix = np.cov(matrix_for_correlation)
 autovals_corr, autovecs_corr = np.linalg.eig(correlation_matrix)
 autovals_cov, autovecs_cov = np.linalg.eig(covariance_matrix)
 
+# print('COR')
+# print(autovals_corr, autovecs_corr)
+
+# print('COV')
+# print(autovals_cov, autovecs_cov)
+
+
 # PCA
 n_components = 3
 pca = PCA(n_components=n_components)
 pca.fit(matrix_for_correlation)
-print('prev', matrix_for_correlation)
+# print('prev', matrix_for_correlation)
 X_new = pca.transform(matrix_for_correlation)
 
-print(X_new)
+# print(X_new)

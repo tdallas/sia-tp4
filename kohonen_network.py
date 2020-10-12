@@ -1,7 +1,9 @@
 import numpy as np
+import pandas as pd
 from math import sqrt
 import random as random
 from scipy.spatial import distance
+import matplotlib.pyplot as plt
 
 
 def get_matrix_indexes_from_weights(index, x_length):
@@ -35,7 +37,7 @@ class Kohonen():
         weights = []
         current_neurons_count = 0
         while current_neurons_count < (self.x_neurons_count * self.y_neurons_count):
-            weights.append(np.array(np.random.rand(component_size)))
+            weights.append(np.array(np.random.rand(component_size), dtype=float))
             current_neurons_count += 1
         return weights
 
@@ -84,3 +86,22 @@ class Kohonen():
             print(min_weight_index)
             print(current_iteration, self.iteration_limit)
             current_iteration += 1
+
+    def construct_nodes_map(self):
+        som_map = []
+        weights_index = 0
+        x_index = 0
+        while x_index < self.x_neurons_count:
+            y_index = 0
+            neurons_vector = []
+            while y_index < self.y_neurons_count:
+                neuron = self.weights[weights_index]
+                weights_index+=1
+                y_index+=1
+                neurons_vector.append(neuron)
+            som_map.append(neurons_vector)
+            x_index+=1    
+        return np.array(som_map)
+
+    # def build_u_matrix(self):
+        
