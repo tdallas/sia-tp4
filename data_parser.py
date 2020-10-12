@@ -10,7 +10,7 @@ def get_average(array):
     return np.average(array)
 
 
-class Parser():
+class DataParser():
     def __init__(self, csv_path):
         self.europe = self.parse_csv(csv_path)
 

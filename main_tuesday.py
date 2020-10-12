@@ -1,4 +1,4 @@
-from parser import Parser
+from data_parser import DataParser
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -6,7 +6,7 @@ import seaborn as sn
 from sklearn.covariance import EmpiricalCovariance
 from sklearn.decomposition import PCA 
 
-parser = Parser('europe.csv')
+parser = DataParser('europe.csv')
 # print(parser.get_numerical_csv())
 # print(np.matrix(parser.get_numerical_csv()).T)
 
