@@ -55,4 +55,8 @@ pca.fit(matrix_for_correlation.T)
 X_new = pca.transform(matrix_for_correlation.T)
 
 # print(X_new)
+print('Cargas de las componentes')
 print(pca.explained_variance_ratio_)
+
+print('Cargas de primer componente principal')
+print(pca.components_[0])
