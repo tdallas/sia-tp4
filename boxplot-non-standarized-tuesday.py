@@ -5,7 +5,7 @@ import pandas as pd
 
 parser = DataParser('europe.csv')
 
-matrix_non_standarized = np.matrix(parser.get_numerical_csv()).T
+matrix_non_standarized = np.matrix(parser.get_numerical_csv())
 
 # Create a figure instance
 fig = plt.figure(1, figsize=(9, 6))
