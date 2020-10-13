@@ -5,15 +5,7 @@ import pandas as pd
 
 parser = DataParser('europe.csv')
 
-matrix_non_standarized = parser.get_numerical_csv()
-data_non_standarized = []
-data_non_standarized.extend(matrix_non_standarized[0])
-data_non_standarized.extend(matrix_non_standarized[1])
-data_non_standarized.extend(matrix_non_standarized[2])
-data_non_standarized.extend(matrix_non_standarized[3])
-data_non_standarized.extend(matrix_non_standarized[4])
-data_non_standarized.extend(matrix_non_standarized[5])
-data_non_standarized.extend(matrix_non_standarized[6])
+matrix_non_standarized = np.matrix(parser.get_numerical_csv()).T
 
 # Create a figure instance
 fig = plt.figure(1, figsize=(9, 6))
@@ -22,11 +14,11 @@ fig = plt.figure(1, figsize=(9, 6))
 ax = fig.add_subplot(111)
 
 ## Custom x-axis labels
-ax.set_xticklabels(['Variables no estandarizadas'])
+ax.set_xticklabels(['Area', 'GDP', 'Inflation', 'Life.expect', 'Military', 'Pop.growth', 'Unemployment'])
 
 ## add patch_artist=True option to ax.boxplot() 
 ## to get fill color
-bp = ax.boxplot(data_non_standarized, patch_artist=True)
+bp = ax.boxplot(matrix_non_standarized, patch_artist=True)
 
 ## change outline color, fill color and linewidth of the boxes
 for box in bp['boxes']:

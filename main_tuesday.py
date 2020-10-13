@@ -33,8 +33,8 @@ correlation_matrix = df.corr()
 # If you want to show heatmap:
 sn.heatmap(correlation_matrix, annot=True)
 plt.xticks(rotation=45)
-# plt.tight_layout()
-# plt.show()
+plt.tight_layout()
+plt.show()
 
 covariance_matrix = np.cov(matrix_for_correlation)
 
@@ -49,7 +49,7 @@ autovals_cov, autovecs_cov = np.linalg.eig(covariance_matrix)
 
 
 # PCA
-n_components = 2
+n_components = 7
 pca = PCA(n_components=n_components)
 pca.fit(matrix_for_correlation.T)
 X_new = pca.transform(matrix_for_correlation.T)
