@@ -47,7 +47,7 @@ def plot(data, test, predicted, figsize=(5, 5)):
         axarr[i, 2].axis('off')
 
     plt.tight_layout()
-    plt.savefig("result.png")
+    # plt.savefig("result.png")
     plt.show()
 
 
@@ -67,34 +67,47 @@ def preprocessing(img, w=128, h=128):
 
 def main():
     # Load data
-    camera = np.array([[1, 1, 1, 1, 1], [-1, -1, -1, 1, -1], [-1, -1, -1,
-                      1, -1], [-1, -1, -1, 1, -1], [1, 1, 1, -1, -1]], dtype=float)
-    astronaut = np.array([[1, 1, 1, 1, 1], [-1, -1, 1, -1, -1], [-1, -1, 1, -1, -1], [-1, -1, 1, -1, -1], [-1, -1, 1, -1, -1]], dtype=float)
-    horse = np.array([[1, 1, 1, 1, 1], [1, -1, -1, -1, -1], [1, 1, 1, 1, 1], [1, -1, -1, -1, -1], [1, 1, 1, 1, 1]], dtype=float)
-    coffee = np.array([[-1, 1, 1, 1, -1], [1, -1, -1, -1, 1], [1, -1, -1, -1, 1], [1, -1, -1, -1, 1], [-1, 1, 1, 1, -1]], dtype=float)
-
+    # camera = np.array([[1, 1, 1, 1, 1], [-1, -1, -1, 1, -1], [-1, -1, -1,
+    #                                                           1, -1], [-1, -1, -1, 1, -1], [1, 1, 1, -1, -1]], dtype=float)
+    # astronaut = np.array([[1, 1, 1, 1, 1], [-1, -1, 1, -1, -1], [-1, -1,
+    #                                                              1, -1, -1], [-1, -1, 1, -1, -1], [-1, -1, 1, -1, -1]], dtype=float)
+    # horse = np.array([[1, 1, 1, 1, 1], [1, -1, -1, -1, -1], [1, 1,
+    #                                                          1, 1, 1], [1, -1, -1, -1, -1], [1, 1, 1, 1, 1]], dtype=float)
+    # coffee = np.array([[-1, 1, 1, 1, -1], [1, -1, -1, -1, 1], [1, -
+    #                                                            1, -1, -1, 1], [1, -1, -1, -1, 1], [-1, 1, 1, 1, -1]], dtype=float)
 
     # Marge data
-    data = [camera, astronaut, horse, coffee]
+    data = np.array([[1, 1, 1, 1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, 1, 1, 1, -1, -1],
+            [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
+                1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
+            [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
+                1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
+            [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
 
     # print('data', data)
 
     # Preprocessing
-    print("Start to data preprocessing...")
-    data = [preprocessing(d) for d in data]
+    # print("Start to data preprocessing...")
+    # data = [preprocessing(d) for d in data]
 
     # Create Hopfield hopfield Model
     model = hopfield.HopfieldNetwork()
     model.train_weights(data)
 
     # Generate testset
-    test = [get_corrupted_input(d, 0.3) for d in data]
+    test = np.array([[1, -1, 1, -1, 1, -1, 1, -1, 1, -1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, -1, 1, 1, -1, -1],
+            [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
+                1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
+            [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
+                1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
+            [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
 
     predicted = model.predict(test, threshold=0, asyn=False)
     print("Show prediction results...")
     plot(data, test, predicted)
     print("Show hopfield weights matrix...")
-    # model.plot_weights()
+    model.plot_weights()
+
 
 if __name__ == '__main__':
     main()

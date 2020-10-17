@@ -99,5 +99,5 @@ class HopfieldNetwork(object):
         plt.colorbar(w_mat)
         plt.title("Network Weights")
         plt.tight_layout()
-        plt.savefig("weights.png")
+        # plt.savefig("weights.png")
         plt.show()
