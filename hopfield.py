@@ -6,7 +6,7 @@ from tqdm import tqdm
 class HopfieldNetwork(object):      
     def train_weights(self, train_data):
         print("Start to train weights...")
-        num_data =  len(train_data)
+        num_data = len(train_data)
         self.num_neuron = train_data[0].shape[0]
         
         # initialize weights
