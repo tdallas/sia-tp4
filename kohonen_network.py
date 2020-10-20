@@ -13,13 +13,10 @@ def get_matrix_indexes_from_weights(index, x_length):
 
 
 class Kohonen():
-    def __init__(self, standarized_dataset, x_neurons_count, y_neurons_count, iteration_limit=250, eta=0.1, shape='R'):
+    def __init__(self, standarized_dataset, k_neurons_count, iteration_limit=250, eta=0.1, shape='R'):
         self.standarized_dataset = standarized_dataset
-        self.x_neurons_count = x_neurons_count
-        self.y_neurons_count = y_neurons_count
+        self.k_neurons_count = k_neurons_count
         self.iteration_limit = iteration_limit
-        # self.iteration_limit = iteration_limit * \
-        # self.x_neurons_count * self.y_neurons_count
         self.eta = eta
         self.weights = self.initialize_random_weights(
             len(standarized_dataset[0]))
@@ -28,7 +25,7 @@ class Kohonen():
         self.shape = 'R'
         self.radius_limit = 1 if self.shape == 'R' else sqrt(2)
         # Initial radius is equal to 80% of the total neurons
-        self.radius = x_neurons_count * y_neurons_count * 0.8
+        self.radius = k_neurons_count * k_neurons_count * 0.8
 
     def get_weights(self):
         return self.weights
@@ -37,7 +34,7 @@ class Kohonen():
     def initialize_random_weights(self, component_size):
         weights = []
         current_neurons_count = 0
-        while current_neurons_count < (self.x_neurons_count * self.y_neurons_count):
+        while current_neurons_count < (self.k_neurons_count * self.k_neurons_count):
             weights.append(np.array(np.random.rand(component_size), dtype=float))
             current_neurons_count += 1
         return weights
@@ -59,8 +56,8 @@ class Kohonen():
     # Im just updating its REALLY NEAR neighbors
     def update_weights_of_neighborhood_R(self, min_weight_index, input):
         # UP, DOWN, RIGHT, LEFT
-        indexes = [min_weight_index - self.x_neurons_count,
-                   min_weight_index + self.x_neurons_count,
+        indexes = [min_weight_index - self.k_neurons_count,
+                   min_weight_index + self.k_neurons_count,
                    min_weight_index + 1,
                    min_weight_index - 1]
         indexes_filtered = filter(lambda x: x >= 0 and x < len(self.weights), indexes)
@@ -70,8 +67,8 @@ class Kohonen():
 
     def calculate_avg_distance_to_neighborhood(self, current_index):
         # UP, DOWN, RIGHT, LEFT
-        indexes = [current_index - self.x_neurons_count,
-                   current_index + self.x_neurons_count,
+        indexes = [current_index - self.k_neurons_count,
+                   current_index + self.k_neurons_count,
                    current_index + 1,
                    current_index - 1]
         indexes_filtered = list(filter(lambda x: x >= 0 and x < len(self.weights), indexes))
@@ -109,28 +106,21 @@ class Kohonen():
             current_iteration += 1
 
     def construct_nodes_map(self):
-        som_map = []
-        weights_index = 0
-        x_index = 0
-        while x_index < self.x_neurons_count:
-            y_index = 0
-            neurons_vector = []
-            while y_index < self.y_neurons_count:
-                neuron = self.weights[weights_index]
-                weights_index+=1
-                y_index+=1
-                neurons_vector.append(neuron)
-            som_map.append(neurons_vector)
-            x_index+=1    
-        return np.array(som_map)
+        som_map=[]
+        for index in range(len(self.weights)):
+            if index % self.k_neurons_count == 0:
+                som_row = []
+            som_row.append(self.weights[index])
+            if index % self.k_neurons_count == self.k_neurons_count - 1:
+                som_map.append(som_row)
+        return som_map
 
     def build_u_matrix(self):
         u_matrix=[]
         for index in range(len(self.weights)):
-            u_row = []
-            for _ in range(self.x_neurons_count):
-                u_row.append(self.calculate_avg_distance_to_neighborhood(index))
-            u_matrix.append(u_row)
+            if index % self.k_neurons_count == 0:
+                u_row = []
+            u_row.append(self.calculate_avg_distance_to_neighborhood(index))
+            if index % self.k_neurons_count == self.k_neurons_count - 1:
+                u_matrix.append(u_row)
         return u_matrix
-
-        
