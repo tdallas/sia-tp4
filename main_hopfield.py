@@ -5,6 +5,7 @@ from skimage.color import rgb2gray
 import skimage.data
 from matplotlib import pyplot as plt
 import numpy as np
+import cv2
 np.random.seed(1)
 
 # Utils
@@ -22,10 +23,11 @@ def get_corrupted_input(input, corruption_level):
 def reshape(data):
     dim = int(np.sqrt(len(data)))
     data = np.reshape(data, (dim, dim))
+    print('data', data)
     return data
 
 
-def plot(data, test, predicted, figsize=(5, 5)):
+def plot(data, test, predicted, figsize=(6, 6)):
     data = [reshape(d) for d in data]
     test = [reshape(d) for d in test]
     predicted = [reshape(d) for d in predicted]
@@ -39,15 +41,14 @@ def plot(data, test, predicted, figsize=(5, 5)):
             axarr[i, 1].set_title("Input data")
             axarr[i, 2].set_title('Output data')
 
-        axarr[i, 0].imshow(data[i])
+        axarr[i, 0].imshow(data[i], cmap='plasma_r')
         axarr[i, 0].axis('off')
-        axarr[i, 1].imshow(test[i])
+        axarr[i, 1].imshow(test[i], cmap='plasma_r')
         axarr[i, 1].axis('off')
-        axarr[i, 2].imshow(predicted[i])
+        axarr[i, 2].imshow(predicted[i], cmap='plasma_r')
         axarr[i, 2].axis('off')
 
     plt.tight_layout()
-    # plt.savefig("result.png")
     plt.show()
 
 
@@ -78,11 +79,11 @@ def main():
 
     # Marge data
     data = np.array([[1, 1, 1, 1, 1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, 1, 1, 1, -1, -1],
-            [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
-                1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
-            [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
-                1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
-            [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
+                     [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
+                      1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
+                     [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
+                      1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
+                     [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
 
     # print('data', data)
 
@@ -96,11 +97,12 @@ def main():
 
     # Generate testset
     test = np.array([[1, -1, 1, -1, 1, -1, 1, -1, 1, -1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, -1, 1, 1, -1, -1],
-            [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
-                1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
-            [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
-                1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
-            [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
+                     [1, 1, 1, 1, 1, -1, -1, 1, -1, -1, -1, -1, 1, -
+                      1, -1, -1, -1, 1, -1, -1, -1, -1, 1, -1, -1],
+                     [1, 1, 1, 1, 1, 1, -1, -1, -1, -1, 1, 1, 1,
+                      1, 1, 1, -1, -1, -1, -1, 1, 1, 1, 1, 1],
+                     # [1, -1, -1, -1, 1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, -1, 1, 1, 1, -1, 1, -1, -1, -1, 1],
+                     [-1, 1, 1, 1, -1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, 1, -1, -1, -1, 1, -1, 1, 1, 1, -1]])
 
     predicted = model.predict(test, threshold=0, asyn=False)
     print("Show prediction results...")
