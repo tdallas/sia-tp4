@@ -10,7 +10,7 @@ standarized_matrix = np.array(parser.get_standarized_matrix()).T
 
 
 k_neurons = 5
-kohonen = Kohonen(standarized_matrix, k_neurons, 2500)
+kohonen = Kohonen(standarized_matrix, k_neurons, iteration_limit=2500, eta=0.0001)
 kohonen.train() 
 
 som_map = kohonen.construct_nodes_map()
@@ -25,6 +25,20 @@ for i in range(len(standarized_matrix)):
 
 print(neurons)
 
-plt.imshow(u_matrix, cmap='gray')  # black = close = clusters
+fig, ax = plt.subplots()
+for i in range(k_neurons):
+    for j in range(k_neurons):
+        if len(neurons[i][j]) > 0:
+            ax.scatter(i, j)
+            ax.annotate('\n'.join(neurons[i][j]), (i, j))
+        else:
+            ax.scatter(i, j)
+plt.title('Paises agrupados por neurona')
+plt.tight_layout()
+plt.show()
+
+plt.imshow(u_matrix, cmap='gray', origin='lower')  # black = close = clusters
 plt.colorbar()
+plt.title('Matriz U')
+plt.tight_layout()
 plt.show()
