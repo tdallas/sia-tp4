@@ -21,8 +21,9 @@ neurons = [[[] for x in range(k_neurons)] for y in range(k_neurons)]
 for i in range(len(standarized_matrix)):
     best_i, best_j, best_difference = kohonen.get_best_matching(standarized_matrix[i])
     neurons[best_i][best_j].append(countries_string[i][0])
-    print("Country: {}, Best neuron: {},{}".format(countries_string[i][0], best_i, best_j))
+    print("Country: {}, Best neuron: {},{}, Best difference: {}".format(countries_string[i][0], best_i, best_j, best_difference))
 
+print('Paises por neurona')
 print(neurons)
 
 fig, ax = plt.subplots()
