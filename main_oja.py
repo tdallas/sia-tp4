@@ -6,14 +6,14 @@ import matplotlib.pyplot as plt
 import math
 
 parser = DataParser('europe.csv')
-standarized_matrix = np.array(parser.get_standarized_matrix())
+standarized_matrix = np.array(parser.get_standarized_matrix()).T
 
-oja = Oja(standarized_matrix.T)
+oja = Oja(standarized_matrix)
 weights_on_iteration, iterations = oja.train()
 oja_component = oja.get_weights()
 
 pca = PCA()
-pca.fit_transform(standarized_matrix.T)
+pca.fit_transform(standarized_matrix)
 pca_component = pca.components_[0]
 
 # Cambio los signos si es que salieron al reves
@@ -47,3 +47,40 @@ print(pca_component)
 
 print('Errores finales')
 print(abs(oja_component - pca_component))
+
+countries_string = parser.parse_as_class()
+countries = []
+values = []
+for i in range(len(standarized_matrix)):
+    countries.append(countries_string[i][0])
+    values.append(sum(standarized_matrix[i] * pca_component))
+
+tupla = list(zip(countries, values))
+tupla.sort(key = lambda t: t[1])
+
+for i in range(len(tupla)):
+    plt.scatter(tupla[i][0], tupla[i][1])
+plt.xlabel("País", fontsize=16)
+plt.xticks(rotation=45)
+plt.ylabel("Valor", fontsize=16)
+plt.title('Valores de paises con PCA')
+plt.tight_layout()
+plt.show()
+
+countries = []
+values = []
+for i in range(len(standarized_matrix)):
+    countries.append(countries_string[i][0])
+    values.append(sum(standarized_matrix[i] * oja_component))
+
+tupla = list(zip(countries, values))
+tupla.sort(key = lambda t: t[1])
+
+for i in range(len(tupla)):
+    plt.scatter(tupla[i][0], tupla[i][1])
+plt.xlabel("País", fontsize=16)
+plt.xticks(rotation=45)
+plt.ylabel("Valor", fontsize=16)
+plt.title('Valores de paises con Oja')
+plt.tight_layout()
+plt.show()
