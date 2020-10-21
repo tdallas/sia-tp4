@@ -26,6 +26,8 @@ class Kohonen():
         self.radius_limit = 1 if self.shape == 'R' else sqrt(2)
         # Initial radius is equal to 80% of the total neurons
         self.radius = k_neurons_count * k_neurons_count * 0.8
+        self.som_map = []
+        self.som_map_build = False
 
     def get_weights(self):
         return self.weights
@@ -106,14 +108,15 @@ class Kohonen():
             current_iteration += 1
 
     def construct_nodes_map(self):
-        som_map=[]
+        self.som_map_build = True
+        self.som_map=[]
         for index in range(len(self.weights)):
             if index % self.k_neurons_count == 0:
                 som_row = []
             som_row.append(self.weights[index])
             if index % self.k_neurons_count == self.k_neurons_count - 1:
-                som_map.append(som_row)
-        return som_map
+                self.som_map.append(som_row)
+        return self.som_map
 
     def build_u_matrix(self):
         u_matrix=[]
@@ -124,3 +127,22 @@ class Kohonen():
             if index % self.k_neurons_count == self.k_neurons_count - 1:
                 u_matrix.append(u_row)
         return u_matrix
+
+    def weight_difference(self, weight, input):
+        difference = abs(weight - input)
+        return sum(difference)
+
+    def get_best_matching(self, input):
+        if not self.som_map_build:
+            self.construct_nodes_map()
+        best_i = 0
+        best_j = 0
+        best_difference = 1.7976931348623157e+308
+        for i in range(self.k_neurons_count):
+            for j in range(self.k_neurons_count):
+                difference = self.weight_difference(self.som_map[i][j], input)
+                if difference < best_difference:
+                    best_difference = difference
+                    best_i = i
+                    best_j = j
+        return best_i, best_j, best_difference

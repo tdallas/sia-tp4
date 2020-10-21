@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from country import Country
 
 
 def get_standar_deviation(array):
@@ -18,7 +17,7 @@ class DataParser():
         return pd.read_csv(csv_path).values
 
     def parse_as_class(self):
-        return list(map(self.europe))
+        return list(self.europe)
 
     def get_numerical_csv(self):
         return list(map(lambda value: value[1:], self.europe))
