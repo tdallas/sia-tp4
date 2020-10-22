@@ -9,8 +9,8 @@ parser = DataParser('europe.csv')
 standarized_matrix = np.array(parser.get_standarized_matrix()).T
 
 
-k_neurons = 10
-kohonen = Kohonen(standarized_matrix, k_neurons, iteration_limit=2500, eta=0.0001)
+k_neurons = 15
+kohonen = Kohonen(standarized_matrix, k_neurons, iteration_limit=3000, eta=0.0001)
 kohonen.train() 
 
 som_map = kohonen.construct_nodes_map()
