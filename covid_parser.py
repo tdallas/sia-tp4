@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-from country import Country
 
 
 def get_standar_deviation(array):
