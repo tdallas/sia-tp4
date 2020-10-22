@@ -55,6 +55,9 @@ for i in range(len(standarized_matrix)):
     countries.append(countries_string[i][0])
     values.append(sum(standarized_matrix[i] * pca_component))
 
+countries_copy = countries.copy()
+pca_values = values.copy()
+
 tupla = list(zip(countries, values))
 tupla.sort(key = lambda t: t[1])
 
@@ -73,6 +76,8 @@ for i in range(len(standarized_matrix)):
     countries.append(countries_string[i][0])
     values.append(sum(standarized_matrix[i] * oja_component))
 
+oja_values = values.copy()
+
 tupla = list(zip(countries, values))
 tupla.sort(key = lambda t: t[1])
 
@@ -84,3 +89,7 @@ plt.ylabel("Valor", fontsize=16)
 plt.title('Valores de paises con Oja')
 plt.tight_layout()
 plt.show()
+
+print("Comparación de valores oja y pca:")
+for i in range(len(countries_copy)):
+    print("{}, OJA: {}, PCA: {}".format(countries[i], oja_values[i], pca_values[i]))
