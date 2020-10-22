@@ -129,8 +129,10 @@ class Kohonen():
         return u_matrix
 
     def weight_difference(self, weight, input):
-        difference = abs(weight - input)
-        return sum(difference)
+        avg = 0
+        for index in range(len(weight)):
+            avg += self.euclidean_distance(weight[index], input[index])
+        return avg / len(weight)
 
     def get_best_matching(self, input):
         if not self.som_map_build:

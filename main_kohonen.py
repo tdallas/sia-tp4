@@ -9,7 +9,7 @@ parser = DataParser('europe.csv')
 standarized_matrix = np.array(parser.get_standarized_matrix()).T
 
 
-k_neurons = 5
+k_neurons = 10
 kohonen = Kohonen(standarized_matrix, k_neurons, iteration_limit=2500, eta=0.0001)
 kohonen.train() 
 
@@ -38,7 +38,7 @@ plt.title('Paises agrupados por neurona')
 plt.tight_layout()
 plt.show()
 
-plt.imshow(u_matrix, cmap='gray', origin='lower')  # black = close = clusters
+ax = plt.imshow(u_matrix, cmap='gray', origin='lower')  # black = close = clusters
 plt.colorbar()
 plt.title('Matriz U')
 plt.tight_layout()
